@@ -1,32 +1,22 @@
 class Solution {
 public:
     int numRescueBoats(vector<int>& people, int limit) {
-        int countBoats = 0;
-
+        // sort from light to heavy
         sort(people.begin(), people.end());
 
-        int i = 0, j = people.size()-1;
+        int countBoats = 0;
+        int i = 0;
+        int j = people.size()-1;
 
         while(i <= j) {
-
-            if(i == j) {
-                countBoats++;
-                i++;
-                j--;
-                continue;
+            // if sum of light and heavy person's weights are less than limit, let them board the boat
+            if(people[i]+people[j] <= limit || i == j) {
+                i++; // move to the next light person
             }
 
-            int weight = people[i]+people[j];
-            
-            if(weight <= limit) {
-                countBoats++;
-                i++;
-                j--;
-            }
-            else if(weight > limit && people[j] <= limit) {
-                countBoats++;
-                j--;
-            }
+            // else if sum of weights is greater than limit, let only the heavy person board the boat
+            countBoats++;
+            j--; // move to the next heavy person
         }
 
         return countBoats;
