@@ -1,41 +1,64 @@
 class Solution {
 public:
     int smallestChair(vector<vector<int>>& times, int targetFriend) {
-        // copy the [arrival, leave] times of target friend
-        vector<int> targetTime = times[targetFriend];
-
-        // sort the time vector based on the arrival times
-        sort(times.begin(), times.end());
-
         int n = times.size();
+        vector<pair<int, int>> events;
 
-        // initialize n chairs 
-        vector<int> chairTime(n);
+        // fill in events vector with the arrival and departure times of all friends
+        for(int i = 0; i < n; i++) {
+            events.push_back({times[i][0], i}); // friends arrival time
+            events.push_back({times[i][1], ~i}); // friends departure time
+        }
+        
+        // sort the events based on the times
+        sort(events.begin(), events.end());
 
-        // iterate through each friend
-        for(auto time : times) {
-            int arrival_i = time[0];
-            int leave_i = time[1];
+        // initialize a min-heap for the available chairs
+        priority_queue<
+            int, 
+            vector<int>, 
+            greater<int>
+        > availableChairs;
 
-            // iterate through each chair 
-            for(int i = 0; i < n; i++) {
+        // initialze a min-heap that will track when each chair gets vacated
+        priority_queue<
+            pair<int, int>, 
+            vector<pair<int, int>>, 
+            greater<pair<int, int>>
+        > occupiedChairs;
 
-                // if the the occupied time of the ith chair is <= to arrival time of friend
-                // this means that chair has now become empty
-                if(chairTime[i] <= arrival_i) {
-                    // make the friend sit on this chair
-                    // set the time of chair to leave time of friend
-                    chairTime[i] = leave_i;
+        // iterate through each chair
+        // initialy all chairs are available, so add all to the available chairs queue
+        for(int i = 0; i < n; i++) {
+            availableChairs.push(i);
+        }
 
-                    // if the time[arrival, leave] equals the time of the target friend
-                    // just return the chair number
-                    if(time == targetTime) return i;
-                    break;
-                }
+        // iterate through each event
+        for(auto& event : events) {
+            int time = event.first; // could be an arrival time or leave time
+            int friendIndex = event.second;
+
+            // iterate through oocupiedChairs queue to check if any chair has been realeased
+            // occupiedChair{leaveTime, chairNo}
+            // the top chair is the chair with the lowest index / chair number
+            while(!occupiedChairs.empty() && occupiedChairs.top().first <= time) {
+                // push chair number into available chairs queue
+                availableChairs.push(occupiedChairs.top().second); 
+
+                // remove the chair from the occupied queue
+                occupiedChairs.pop();
+            }
+
+            if(friendIndex >= 0) {
+                int chair = availableChairs.top();
+                availableChairs.pop();
+
+                if(friendIndex == targetFriend) return chair;
+
+                occupiedChairs.push({times[friendIndex][1], chair});
             }
         }
 
-        // if no chair was found for the friend then return 0
-        return 0;
+        return -1;
     }
 };
