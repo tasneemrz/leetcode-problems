@@ -10,7 +10,6 @@
  * };
  */
 
- // we need to return the kth largest sum of the levels
 class Solution {
 public:
     long long kthLargestLevelSum(TreeNode* root, int k) {
@@ -20,35 +19,30 @@ public:
         q.push(root);
 
         vector<long long> allLevelSums; // store sum of each level
-        long long levelSum = 0; // keep track of the sum for the current level
-        int currLevelNodes = q.size(); // keep track of the number of nodes in the current level
 
         while(!q.empty()) {
-            // if current level nodes become 0; all nodes of this level have been traversed
-            if(currLevelNodes == 0) {
-                allLevelSums.push_back(levelSum);
-                levelSum = 0; // reset to calculate next levels sum
-                currLevelNodes = q.size(); // next levels number of nodes is equal to size of queue
+            long long currLevelSum = 0; 
+            int currLevelNodes = q.size(); 
+
+            // iterate through each node in the current level
+            while(currLevelNodes--) {
+                TreeNode* node = q.front();
+                q.pop();
+
+                currLevelSum += node->val;
+
+                if(node->left != nullptr) q.push(node->left);
+                if(node->right != nullptr) q.push(node->right);
             }
 
-            TreeNode* node = q.front();
-            levelSum += node->val;
-
-            q.pop();
-            currLevelNodes--;
-
-            if(node->left != nullptr) q.push(node->left);
-            if(node->right != nullptr) q.push(node->right);
+            allLevelSums.push_back(currLevelSum);
         }
-        allLevelSums.push_back(levelSum); // add the last levels sum
+
+        if(k > allLevelSums.size()) return -1;
 
         // sort the sums in ascending order
         sort(allLevelSums.begin(), allLevelSums.end());
-
-        int kLargestSum_i = allLevelSums.size() - k;
-
-        if(kLargestSum_i < 0) 
-            return -1;
-        return allLevelSums[kLargestSum_i];
+        
+        return allLevelSums[allLevelSums.size() - k];
     }
 };
