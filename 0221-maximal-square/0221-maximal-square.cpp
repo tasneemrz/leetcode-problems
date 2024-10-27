@@ -8,7 +8,7 @@ public:
         // each cell will be taken as the top left corner of the square
         vector<vector<int>> cache(m, vector<int>(n, -1));
 
-        // base case for all the columns of each row
+        // base case for all the last columns of each row
         for(int row = 0; row < m; row++) {
             if(matrix[row][n-1] == '1')
                 cache[row][n-1] = 1;
@@ -36,7 +36,7 @@ public:
             }
         }
 
-        // iterate over cache to find the square max side length 
+        // iterate over cache to find the square with max side length 
         int maxLength = 0;
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < n; j++) {
