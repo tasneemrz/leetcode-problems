@@ -2,25 +2,19 @@ class Solution {
 public:
     string compressedString(string word) {
         string comp = "";
+        int i = 0;
 
-        // pos tracks our position in the input string
-        int pos = 0;
+        while (i < word.size()) {
+            char currChar = word[i];
+            int count = 0;
 
-        // Process until we reach end of string
-        while (pos < word.length()) {
-            int consecutiveCount = 0;
-
-            char currentChar = word[pos];
-
-            // Count consecutive occurrences (maximum 9)
-            while (pos < word.length() && consecutiveCount < 9 &&
-                   word[pos] == currentChar) {
-                consecutiveCount++;
-                pos++;
+            while (i < word.size() && word[i] == currChar && count < 9) {
+                ++count;
+                ++i;
             }
-
-            // Append count followed by character to result
-            comp += to_string(consecutiveCount) + currentChar;
+            
+            comp += count+'0';
+            comp += currChar;
         }
 
         return comp;
