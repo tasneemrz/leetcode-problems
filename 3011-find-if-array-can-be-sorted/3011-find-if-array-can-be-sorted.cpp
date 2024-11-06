@@ -22,9 +22,10 @@ private:
     int setBits(int num) {
         int countSetBits = 0;
 
-        for(int mask = 1; mask <= 256; mask<<=1) {
-            if ((mask & num) != 0)
+        while(num) {
+            if ((num & 1) != 0)
                 countSetBits++;
+            num >>= 1;
         }
 
         return countSetBits;
