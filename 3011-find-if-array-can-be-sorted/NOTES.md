@@ -1,1 +1,3 @@
+for the test case : `[4,2,30,8,15]`
 ​
+Here we would think that the numbers can be arranged as `[2, 4, 8, 15, 30]` by swapping 30 and 8, but this is not allowed because of the constraint that we can only swap with the adjacent element if it has the same number of set bits, so, 30 and 8 cannot be swapped. In this case `[4, 2]` makes one segment that has 1 set bit, `[30]` makes another segment that has 4 set bits, then `[8]` makes another segment having 1 set bit (we cannot swap 30 and 8 so we consider making them separate segments), but this is not going to give a continuously increasing arrangement of segments that satisfies the given constraints. Hence this test case returns false.
