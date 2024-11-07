@@ -4,11 +4,11 @@ public:
         int maxElements = 0;
         int n = candidates.size();
         
-        for(int mask = 1; mask <= (1 << 24); mask <<= 1) {
+        for(int bit = 0; bit < 24; bit++) {
             int elements = 0;
             
-            for(int i = 0; i < n; i++) 
-                if((mask & candidates[i]) != 0) 
+            for(int num : candidates) 
+                if(num & (1 << bit)) 
                     elements++;
                 
             maxElements = max(maxElements, elements);
