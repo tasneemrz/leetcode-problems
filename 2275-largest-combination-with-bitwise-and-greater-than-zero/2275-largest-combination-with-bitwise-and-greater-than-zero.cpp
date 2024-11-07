@@ -2,7 +2,6 @@ class Solution {
 public:
     int largestCombination(vector<int>& candidates) {
         int maxElements = 0;
-        int n = candidates.size();
         
         for(int bit = 0; bit < 24; bit++) {
             int elements = 0;
