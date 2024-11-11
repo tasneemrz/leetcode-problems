@@ -1,8 +1,6 @@
 class Solution {
 public:
     bool primeSubOperation(vector<int>& nums) {
-        int n = nums.size();
-        
         int maxNumber = *max_element(nums.begin(), nums.end());
         
         vector<int> previousPrime(maxNumber+1, 0);
