@@ -1,14 +1,10 @@
 class Solution {
 public:
+    static vector<int> previousPrime;
+    
     bool primeSubOperation(vector<int>& nums) {
-        int maxNumber = *max_element(nums.begin(), nums.end());
-        
-        vector<int> previousPrime(maxNumber+1, 0);
-        for(int i = 2; i <= maxNumber; i++) {
-            if(checkPrime(i)) 
-                previousPrime[i] = i;
-            else 
-                previousPrime[i] = previousPrime[i-1];
+        if (previousPrime.empty()) {
+            computePreviousPrimes(1000);
         }
  
         for(int i = 0; i < nums.size(); i++) {
@@ -32,7 +28,18 @@ public:
     }
 
 private: 
-    bool checkPrime(int n) {
+    static void computePreviousPrimes(int maxLimit) {
+        previousPrime.resize(maxLimit+1, 0);
+        
+        for (int i = 2; i <= maxLimit; i++) {
+            if (checkPrime(i)) 
+                previousPrime[i] = i;
+            else 
+                previousPrime[i] = previousPrime[i-1];
+        }
+    }
+    
+    static bool checkPrime(int n) {
         for(int i = 2; i*i <= n; i++) {
             if(n % i == 0) 
                 return false;
@@ -40,3 +47,5 @@ private:
         return true;
     }
 };
+
+vector<int> Solution::previousPrime;
