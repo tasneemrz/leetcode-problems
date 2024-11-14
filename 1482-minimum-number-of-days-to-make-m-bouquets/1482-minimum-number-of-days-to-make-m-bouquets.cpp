@@ -27,14 +27,12 @@ private:
         for(int i = 0; i < bloomDay.size(); i++) {
             if(bloomDay[i] <= day) {
                 count++;
-                if(count == k) {
-                    numBouquetsFormed++;
-                    count = 0;
-                }
             } else {
+                numBouquetsFormed += (count / k);
                 count = 0;
             }
         }
+        numBouquetsFormed += (count / k);
             
         return numBouquetsFormed;
     }
