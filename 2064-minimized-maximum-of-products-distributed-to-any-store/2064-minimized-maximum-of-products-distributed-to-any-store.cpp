@@ -1,11 +1,8 @@
 class Solution {
 public:
     int minimizedMaximum(int n, vector<int>& quantities) {
-        
-        int p = quantities.size();
-        
         int low = 1;
-        int high = findMax(quantities);
+        int high = *max_element(quantities.begin(), quantities.end());
         
         while(low <= high) {
             int mid = (low + high) / 2;
@@ -40,15 +37,5 @@ private:
             return true;
         }
         return false;
-    }
-    
-    int findMax(vector<int>& nums) {
-        int maxVal = INT_MIN;
-        
-        for(int i = 0; i < nums.size(); i++) {
-            maxVal = max(maxVal, nums[i]);
-        }
-        
-        return maxVal;
     }
 };
