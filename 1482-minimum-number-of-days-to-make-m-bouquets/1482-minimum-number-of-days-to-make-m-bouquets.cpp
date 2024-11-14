@@ -4,23 +4,23 @@ public:
         if((1LL * m * k) > bloomDay.size()) 
             return -1;
         
-        int low = *min_element(bloomDay.begin(), bloomDay.end());
-        int high = *max_element(bloomDay.begin(), bloomDay.end());
+        int low = findMin(bloomDay);
+        int high = findMax(bloomDay);
         
-        while(low < high) {
+        while(low <= high) {
             int mid = low + (high - low) / 2;
             
-            if(canMakeBouquets(bloomDay, m, k, mid)) 
-                high = mid;
-            else
+            if(numBouquets(bloomDay, m, k, mid) < m) 
                 low = mid + 1;
+            else
+                high = mid - 1;
         }
         
         return low;
     }
     
 private:
-    bool canMakeBouquets(vector<int>& bloomDay, int m, int k, int day) {
+    int numBouquets(vector<int>& bloomDay, int m, int k, int day) {
         int count = 0;
         int numBouquetsFormed = 0;
         
@@ -34,11 +34,28 @@ private:
             } else {
                 count = 0;
             }
-            
-            if(numBouquetsFormed >= m) 
-                return true;
         }
             
-        return false;
+        return numBouquetsFormed;
+    }
+    
+    int findMin(vector<int>& bloomDay) {
+        int minVal = INT_MAX;
+        
+        for(int i = 0; i < bloomDay.size(); i++) {
+            minVal = min(minVal, bloomDay[i]);
+        }
+        
+        return minVal;
+    }
+    
+    int findMax(vector<int>& bloomDay) {
+        int maxVal = INT_MIN;
+        
+        for(int i = 0; i < bloomDay.size(); i++) {
+            maxVal = max(maxVal, bloomDay[i]);
+        }
+        
+        return maxVal;
     }
 };
