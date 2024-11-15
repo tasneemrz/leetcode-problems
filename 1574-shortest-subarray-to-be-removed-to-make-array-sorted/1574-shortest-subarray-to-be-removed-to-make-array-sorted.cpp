@@ -15,8 +15,7 @@ public:
         }
         
         // case : the array is already sorted
-        if (left == right) 
-            return 0;
+        if (left == right) return 0;
         
         // iterate the right pointer from the end towards left hand side
         while (right > 0) {
