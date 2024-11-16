@@ -1,23 +1,21 @@
 class Solution {
 public:
     vector<int> resultsArray(vector<int>& nums, int k) {
-        int n = nums.size();
-        vector<int> result(n - k + 1);
+        if(k == 1) return nums;
         
-        for(int i = 0; i < n-k+1; i++) {
-            bool isConsecutiveAndSorted = true;
-
-            for(int j = i; j < i + k - 1; j++) {
-                if(nums[j+1] - nums[j] != 1) {
-                    isConsecutiveAndSorted = false;
-                    break;
-                }
-            }
-
-            if(isConsecutiveAndSorted) {
-                result[i] = nums[i+k-1];
+        size_t n = nums.size();
+        vector<int> result(n - k + 1, -1);
+        int consecutiveCount = 1;
+        
+        for(size_t i = 0; i < n - 1; i++) {
+            if(nums[i+1] - nums[i] == 1) {
+                consecutiveCount++;
             } else {
-                result[i] = -1;
+                consecutiveCount = 1;
+            }
+            
+            if(consecutiveCount >= k) {
+                result[i - k + 2] = nums[i + 1];
             }
         }
         
