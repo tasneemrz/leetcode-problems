@@ -18,7 +18,8 @@ public:
             return 0;
         return low;
     }
-    
+
+private:
     bool subarrayWithTargetSum(int target, vector<int>& nums, int maxLength) {
         int sum = 0;
         int i = 0;
