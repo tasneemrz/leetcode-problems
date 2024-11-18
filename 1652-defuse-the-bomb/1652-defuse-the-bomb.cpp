@@ -13,19 +13,13 @@ public:
         }
         
         int i = 0;
-        while (i < n && k > 0) {
-            int sum = 0;
-            for(int j = 1; j <= k; j++) 
-                sum += codeTemp[i + n + j];
-            ans[i] = sum;
-            i++;
-        }
-        
-        while(i < n && k < 0) {
-            int sum = 0;
-            for(int j = 1; j <= (-k); j++) 
-                sum += codeTemp[i + n - j];
-            ans[i] = sum;
+        while (i < n) {
+            for(int j = 1; j <= k && k > 0; j++) 
+                ans[i] += codeTemp[i + n + j];
+            
+            for(int j = 1; j <= (-k) && k < 0; j++) 
+                ans[i] += codeTemp[i + n - j];
+            
             i++;
         }
         
