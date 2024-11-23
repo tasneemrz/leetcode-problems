@@ -4,24 +4,6 @@ public:
     const char OBSTACLE = '*';
     const char EMPTY = '.';
     
-    void applyGravity(vector<vector<char>>& rotatedBox, int i, int j) {
-        int nextRowWithStone = -1;
-        
-        for(int k = i - 1; k >= 0; k--) {
-            if (rotatedBox[k][j] == OBSTACLE)
-                break;
-            if(rotatedBox[k][j] == STONE) {
-                nextRowWithStone = k;
-                break;
-            }
-        }
-        
-        if (nextRowWithStone != -1) {
-            rotatedBox[nextRowWithStone][j] = EMPTY;
-            rotatedBox[i][j] = STONE;
-        }
-    }
-    
     vector<vector<char>> rotateTheBox(vector<vector<char>>& box) {
         int m = box.size();
         int n = box[0].size();
@@ -37,9 +19,18 @@ public:
         }
         
         for (int j = 0; j < m; j++) {
+            int lowestRowWithEmptyCell = n - 1;
+            
             for (int i = n - 1; i >= 0; i--) {
-                if (rotatedBox[i][j] == EMPTY) 
-                    applyGravity(rotatedBox, i, j);
+                if (rotatedBox[i][j] == STONE) {
+                    rotatedBox[i][j] = EMPTY;
+                    rotatedBox[lowestRowWithEmptyCell][j] = STONE;
+                    lowestRowWithEmptyCell--;
+                } 
+                
+                if(rotatedBox[i][j] == OBSTACLE) {
+                    lowestRowWithEmptyCell = i - 1;
+                }
             }
         }
         
