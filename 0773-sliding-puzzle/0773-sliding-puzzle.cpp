@@ -59,3 +59,14 @@ public:
         return -1;
     }
 };
+
+/*
+    time complexity:
+        positions are 6
+        total possible states are 6!;
+        in worst case we may visit all possible states = O(6!)
+        
+    space complexity:
+        queue can take up the max size of O(6!)
+*/
+
