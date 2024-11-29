@@ -1,50 +1,46 @@
 class Solution {
 public:
+    #define pip pair<int, pair<int, int>>
+    
     int minimumTime(vector<vector<int>>& grid) {
-        if (grid[0][1] > 1 && grid[1][0] > 1) {
+        vector<int> dir = {-1, 0, 1, 0, -1};
+        int m = grid.size();
+        int n = grid[0].size();
+        
+        if(grid[0][1] > 1 + grid[0][0] && grid[1][0] > 1+grid[0][0])
             return -1;
-        }
-
-        int rows = grid.size(), cols = grid[0].size();
-        vector<vector<int>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-        vector<vector<bool>> visited(rows, vector<bool>(cols, false));
-
-        priority_queue<vector<int>, vector<vector<int>>, greater<>> pq;
-        pq.push({grid[0][0], 0, 0});
-
-        while (!pq.empty()) {
-            auto curr = pq.top();
-            pq.pop();
-            int time = curr[0], row = curr[1], col = curr[2];
-
-            if (row == rows - 1 && col == cols - 1) {
+        
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        priority_queue<pip, vector<pip>, greater<pip>> minHeap;
+        minHeap.push({0,{0,0}});
+        visited[0][0] = true;
+        
+        while(!minHeap.empty()) {
+            pip curr = minHeap.top();
+            minHeap.pop();
+            
+            int time = curr.first;
+            int x = curr.second.first;
+            int y = curr.second.second;
+            
+            if(x == m-1 && y == n-1)
                 return time;
-            }
-
-            if (visited[row][col]) {
-                continue;
-            }
-            visited[row][col] = true;
-
-            for (auto& d : directions) {
-                int nextRow = row + d[0], nextCol = col + d[1];
-                if (!isValid(visited, nextRow, nextCol)) {
-                    continue;
+            
+            for(int i = 0; i < 4; i++) {
+                int newX = x + dir[i];
+                int newY = y + dir[i+1];
+                
+                if(newX >= 0 && newX < m && newY >= 0 && newY < n && !visited[newX][newY]) {
+                    visited[newX][newY] = true;
+                    int newTime = time+1;
+                    if(grid[newX][newY] > newTime) {
+                        newTime = (grid[newX][newY]-time) & 1 ? grid[newX][newY] : grid[newX][newY]+1;
+                    }
+                    minHeap.push({newTime, {newX, newY}});
                 }
-
-                int waitTime =
-                    ((grid[nextRow][nextCol] - time) % 2 == 0) ? 1 : 0;
-                int nextTime = max(grid[nextRow][nextCol] + waitTime, time + 1);
-                pq.push({nextTime, nextRow, nextCol});
             }
         }
+        
         return -1;
-    }
-
-private:
-
-    bool isValid(vector<vector<bool>>& visited, int row, int col) {
-        return row >= 0 && col >= 0 && row < visited.size() &&
-               col < visited[0].size() && !visited[row][col];
     }
 };
