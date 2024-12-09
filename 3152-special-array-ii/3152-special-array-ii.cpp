@@ -1,51 +1,26 @@
 class Solution {
 public:
-    vector<bool> isArraySpecial(vector<int>& nums,
-                                vector<vector<int>>& queries) {
-        vector<bool> ans(queries.size());
-        vector<int> violatingIndices;
-
-        for (int i = 1; i < nums.size(); i++) {
-            if (nums[i] % 2 == nums[i - 1] % 2) {
-                violatingIndices.push_back(i);
-            }
+    vector<bool> isArraySpecial(vector<int>& nums, vector<vector<int>>& queries) {
+        int n = nums.size();
+        vector<int> prefixSum(n, 1);
+        
+        for(int i = 1; i < n; i++) {
+            if((nums[i]&1) != (nums[i-1]&1)) 
+                prefixSum[i] += prefixSum[i-1];
         }
-
-        for (int i = 0; i < queries.size(); i++) {
-            vector<int> query = queries[i];
+        
+        vector<bool> ans;
+        
+        for(auto& query : queries) {
             int start = query[0];
             int end = query[1];
-
-            bool foundViolatingIndex =
-                binarySearch(start + 1, end, violatingIndices);
-
-            if (foundViolatingIndex) {
-                ans[i] = false;
-            } else {
-                ans[i] = true;
-            }
+            
+            if(prefixSum[end] >= end-start+1) 
+                ans.push_back(true);
+            else
+                ans.push_back(false);
         }
-
+        
         return ans;
-    }
-
-private:
-    bool binarySearch(int start, int end, vector<int>& violatingIndices) {
-        int left = 0;
-        int right = violatingIndices.size() - 1;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            int violatingIndex = violatingIndices[mid];
-
-            if (violatingIndex < start) {
-                left = mid + 1;
-            } else if (violatingIndex > end) {
-                right = mid - 1;
-            } else {
-                return true;
-            }
-        }
-
-        return false;
     }
 };
