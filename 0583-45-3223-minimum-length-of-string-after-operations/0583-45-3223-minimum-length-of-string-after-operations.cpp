@@ -1,21 +1,21 @@
 class Solution {
 public:
     int minimumLength(string s) {
-        unordered_map<char, int> hashMap;
+        vector<int> freq(26, 0);
         for(char c : s) {
-            hashMap[c]++;
+            freq[c - 'a']++;
         }
 
-        int ans = 0;
-        for(auto x : hashMap) {
-            if(x.second % 2 == 0) {
-                ans += 2;
+        int length = 0;
+        for(int i = 0; i < 26; i++) {
+            if(freq[i] & 1) {
+                length += 1;
             }
             else {
-                ans += 1;
+                length += min(2, freq[i]);
             }
         }
 
-        return ans;
+        return length;
     }
 };
