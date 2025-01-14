@@ -4,16 +4,14 @@ public:
         int n = A.size();
         vector<int> freqArr(n + 1, 0);
         vector<int> ans(n, 0);
-
+        
+        int count = 0;
         for(int i = 0; i < n; i++) {
             freqArr[A[i]]++;
+            if(freqArr[A[i]] == 2) count++;
+            
             freqArr[B[i]]++;
-
-            int count = 0; 
-            for(int j = 0; j < n + 1; j++) {
-                if(freqArr[j] == 2)
-                    count++;
-            }
+            if(freqArr[B[i]] == 2) count++;
 
             ans[i] = count;
         }
